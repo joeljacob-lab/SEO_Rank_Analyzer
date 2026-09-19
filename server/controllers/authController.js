@@ -1,6 +1,7 @@
 import User from "../models/User";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import auth from "../middleware/auth";
 
 //Generate JWT
 const generateToken = (id) => {
@@ -64,7 +65,25 @@ export const login = async (req,res)=>{
         res.status(201).json({success:true},token,user)
 
     } catch (error) {
-        console.error("Registration Error:", error.message)
+        console.error("Login Error:", error.message)
+        res.json(500).json({success:false, message:"Server error"})
+    }
+}
+
+
+
+
+//Get current user
+export const getUser= async (req,res)=>{
+    try {
+        const user = await User.findbyId(req.userId).select("-password")
+        if(!user){
+            return res.status(400).json({success:false, message:"user not found"})
+        }
+        res.json({success:true, user})
+
+    } catch (error) {
+        console.error("Get User Error:", error.message)
         res.json(500).json({success:false, message:"Server error"})
     }
 }
