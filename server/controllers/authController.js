@@ -1,7 +1,6 @@
 import User from "../models/User";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import auth from "../middleware/auth";
 
 //Generate JWT
 const generateToken = (id) => {
