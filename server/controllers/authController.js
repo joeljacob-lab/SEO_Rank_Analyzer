@@ -1,4 +1,4 @@
-import User from "../models/User";
+import User from "../models/User.js";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
@@ -17,24 +17,24 @@ export const register = async (req,res)=>{
         }
 
         //check if user exists
-        const existingUser = await User.findOne(email)
+        const existingUser = await User.findOne({ email })
         if (existingUser){
             return res.status(400).json({success:false, message:"User already exists"})
         }
 
         //hashing password
-        const hashedPassword = bcrypt.hash(password, await bcrypt.genSalt(10))
+        const hashedPassword = await bcrypt.hash(password, await bcrypt.genSalt(10))
 
         //Creating a new user
         const user = await User.create({name, email, password:hashedPassword})
 
         const token = generateToken(user._id)
 
-        res.status(201).json({success:true},token,user)
+        res.status(201).json({success:true, token, user})
 
     } catch (error) {
         console.error("Registration Error:", error.message)
-        res.json(500).json({success:false, message:"Server error"})
+        res.status(500).json({success:false, message:"Server error"})
     }
 }
 
@@ -48,7 +48,7 @@ export const login = async (req,res)=>{
         }
 
         //Find User
-        const user = await User.findOne(email)
+        const user = await User.findOne({ email })
         if(!user){
             return res.status(400).json({success:false, message:"Invalid credentials"})
         }
@@ -61,11 +61,11 @@ export const login = async (req,res)=>{
 
         const token = generateToken(user._id)
 
-        res.status(201).json({success:true},token,user)
+        res.status(200).json({success:true, token, user})
 
     } catch (error) {
         console.error("Login Error:", error.message)
-        res.json(500).json({success:false, message:"Server error"})
+        res.status(500).json({success:false, message:"Server error"})
     }
 }
 
@@ -75,7 +75,7 @@ export const login = async (req,res)=>{
 //Get current user
 export const getUser= async (req,res)=>{
     try {
-        const user = await User.findbyId(req.userId).select("-password")
+        const user = await User.findById(req.userId).select("-password")
         if(!user){
             return res.status(400).json({success:false, message:"user not found"})
         }
@@ -83,6 +83,6 @@ export const getUser= async (req,res)=>{
 
     } catch (error) {
         console.error("Get User Error:", error.message)
-        res.json(500).json({success:false, message:"Server error"})
+        res.status(500).json({success:false, message:"Server error"})
     }
 }

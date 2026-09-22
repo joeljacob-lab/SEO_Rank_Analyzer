@@ -1,16 +1,47 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Mail, Lock, Loader2, ChartNoAxesColumnIcon, User2Icon } from "lucide-react";
+import {useApp} from "../context/AppContext"
+import {toast} from "react-hot-toast"
 
-export default function Login({ state }: { state: string }) {
+// Removed TypeScript type ': { state: string }'
+export default function Login({ state }) {
     const [isLoginState, setIsLoginState] = useState(state === "login");
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [loading] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const {login,register} = useApp()
 
-    const handleSubmit = async (e: React.SubmitEvent) => {
+    useEffect(() => {
+        setIsLoginState(state === "login");
+    }, [state]);
+
+    const [searchParams] = useSearchParams()
+    const navigate = useNavigate()
+
+    
+    // Removed TypeScript type ': React.SubmitEvent'
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true)
+
+        let result;
+        if(isLoginState){
+            result = await login(email, password)
+        }
+        else{
+            result = await register(name, email, password)
+        }
+
+        if(result.success){
+            const redirect = searchParams.get("redirect") || "/dashboard"
+            navigate(redirect)
+        }
+        else{
+            toast.error(result.message || "Login failed" )
+        }
+        setLoading(false)
     };
 
     return (
@@ -29,7 +60,9 @@ export default function Login({ state }: { state: string }) {
                     <form onSubmit={handleSubmit} className="space-y-5">
                         <div className="text-center py-5">
                             <h1 className="text-2xl text-foreground">Welcome back</h1>
-                            <p className="text-muted-foreground text-sm mt-1">{isLoginState ? "Sign in to your" : "Create an"} Rank Pilot account</p>
+                            <p className="text-muted-foreground text-sm mt-1">
+                                {isLoginState ? "Sign in to your" : "Create an"} Rank Pilot account
+                            </p>
                         </div>
 
                         {!isLoginState && (
