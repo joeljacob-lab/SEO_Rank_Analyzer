@@ -14,7 +14,12 @@ import { useApp } from "./context/AppContext";
 
 export default function App() {
 
-    const [user,loading] = useApp()
+    const {user,loading} = useApp();
+
+    // Wait until user data finishes loading
+    if (loading) {
+        return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+    }
 
     const location = useLocation();
 

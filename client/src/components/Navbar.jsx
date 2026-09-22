@@ -2,19 +2,22 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 import { Search, BarChart3, History, LogOut, Menu, X, Target, Sun, Moon, ChartNoAxesColumnIcon } from "lucide-react";
 import { useState } from "react";
+import { useApp } from "../context/AppContext";
 
 export default function Navbar() {
-    const { user } = { user: { name: "John", email: "john@example.com", plan: "PRO" } };
+    const { user, logout } = useApp();
     const { theme, setTheme } = useTheme();
     const navigate = useNavigate();
     const location = useLocation();
     const [mobileOpen, setMobileOpen] = useState(false);
 
     const handleLogout = () => {
+        logout()
         navigate("/");
     };
 
-    const isActive = (path: string) => location.pathname === path;
+    // Removed TypeScript type ': string'
+    const isActive = (path) => location.pathname === path;
 
     const navLinks = [
         { path: "/dashboard", label: "Dashboard", icon: <BarChart3 size={18} /> },
@@ -37,7 +40,11 @@ export default function Navbar() {
                     {user && (
                         <div className="hidden md:flex items-center gap-1">
                             {navLinks.map((link) => (
-                                <Link key={link.path} to={link.path} className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all ${isActive(link.path) ? "bg-accent/5 text-accent font-medium" : "text-muted-foreground hover:text-foreground hover:bg-muted/80"}`}>
+                                <Link 
+                                    key={link.path} 
+                                    to={link.path} 
+                                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all ${isActive(link.path) ? "bg-accent/5 text-accent font-medium" : "text-muted-foreground hover:text-foreground hover:bg-muted/80"}`}
+                                >
                                     {link.icon}
                                     {link.label}
                                 </Link>
@@ -47,7 +54,11 @@ export default function Navbar() {
 
                     {/* Right side */}
                     <div className="hidden md:flex items-center gap-3">
-                        <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-full transition-colors flex items-center justify-center" aria-label="Toggle theme">
+                        <button 
+                            onClick={() => setTheme(theme === "dark" ? "light" : "dark")} 
+                            className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-full transition-colors flex items-center justify-center" 
+                            aria-label="Toggle theme"
+                        >
                             {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
                         </button>
 
