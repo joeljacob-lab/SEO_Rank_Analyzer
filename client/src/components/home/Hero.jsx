@@ -7,7 +7,7 @@ export default function Hero() {
     const [url, setUrl] = useState("");
     const navigate = useNavigate();
 
-    const handleQuickAnalyze = (e: React.SubmitEvent) => {
+    const handleQuickAnalyze = (e) => {
         e.preventDefault();
         navigate(`/analyze?url=${encodeURIComponent(url)}`);
     };
@@ -24,7 +24,7 @@ export default function Hero() {
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-medium leading-tight mb-6 text-foreground">
                 Analyze & Boost Your <span className="gradient-text dm-serif">SEO Rankings</span>
             </h1>
-            <p className="text-sm  text-muted-foreground max-w-xl mx-auto mb-10 leading-relaxed">Get instant AI-powered SEO audits for any website. Uncover hidden issues, optimize performance, and outrank your competition.</p>
+            <p className="text-sm text-muted-foreground max-w-xl mx-auto mb-10 leading-relaxed">Get instant AI-powered SEO audits for any website. Uncover hidden issues, optimize performance, and outrank your competition.</p>
 
             {/* URL Input Bar */}
             <form onSubmit={handleQuickAnalyze} className="max-w-2xl mx-auto relative">

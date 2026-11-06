@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { SearchIcon, GlobeIcon, FileSearchIcon, BrainIcon, CheckCircleIcon, AlertCircle, Loader2, ArrowRightIcon } from "lucide-react";
@@ -17,11 +16,11 @@ export default function Analyze() {
     const [currentStep, setCurrentStep] = useState(0);
     const [error, setError] = useState("");
     const [searchParams] = useSearchParams();
-    const pollRef = useRef<any>(null);
+    const pollRef = useRef(null);
 
     const navigate = useNavigate();
 
-    const handleAnalyze = async (submitUrl?: string) => {
+    const handleAnalyze = async (submitUrl) => {
         const targetUrl = submitUrl || url;
         if (!targetUrl.trim()) return;
 
@@ -38,7 +37,7 @@ export default function Analyze() {
         }, 8000);
     };
 
-    const handleSubmit = (e: React.SubmitEvent) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         handleAnalyze();
     };

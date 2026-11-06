@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { homeHowItWorksData } from "../../assets/assets";
 
 export default function HowItWorks() {
@@ -15,7 +14,7 @@ export default function HowItWorks() {
                 {/* Connecting Line (Desktop) */}
                 <div className="hidden md:block absolute top-[110px] left-[15%] right-[15%] h-px border-t border-dashed border-border pointer-events-none z-0"></div>
 
-                {homeHowItWorksData.map((step: any, i: number) => (
+                {homeHowItWorksData.map((step, i) => (
                     <div key={step.num} className="relative z-10 animate-slide-up" style={{ animationDelay: `${i * 100}ms` }}>
                         <div className="bg-card border border-border rounded-2xl p-8 text-center h-full hover:bg-muted transition-all group/step">
                             <div className="text-5xl font-bold text-primary/10 mb-4 group-hover/step:text-primary/20 transition-colors">{step.num}</div>

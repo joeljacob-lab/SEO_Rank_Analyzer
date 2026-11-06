@@ -4,26 +4,12 @@ import { Clock, Trash2, ExternalLink, Search, AlertCircle, Loader2, Filter, Arro
 import ScoreGauge from "../components/ScoreGauge";
 import { dummyAnalysisData } from "../assets/assets";
 
-interface AnalysisItem {
-    _id: string;
-    url: string;
-    overallScore: number;
-    status: string;
-    createdAt: string;
-    categories: {
-        seo: number;
-        performance: number;
-        accessibility: number;
-        bestPractices: number;
-    };
-}
-
 export default function History() {
-    const [analyses, setAnalyses] = useState<AnalysisItem[]>([]);
+    const [analyses, setAnalyses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [deleting, setDeleting] = useState<string | null>(null);
+    const [deleting, setDeleting] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [statusFilter, setStatusFilter] = useState("all");
     const [sortBy, setSortBy] = useState("newest");
@@ -37,7 +23,7 @@ export default function History() {
         }, 1000);
     };
 
-    const handleDelete = async (id: string) => {
+    const handleDelete = async (id) => {
         if (!confirm("Delete this analysis?")) return;
         setDeleting(id);
         setTimeout(() => {
@@ -45,7 +31,7 @@ export default function History() {
         }, 1000);
     };
 
-    const getScoreClass = (s: number) => {
+    const getScoreClass = (s) => {
         if (s >= 80) return "score-good";
         if (s >= 50) return "score-medium";
         return "score-poor";

@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AlertTriangleIcon, ClockIcon } from "lucide-react";
 import ScoreGauge from "./ScoreGauge";
 import { Link } from "react-router-dom";
 
-export default function AnalysesCard({ analysis }: { analysis: any }) {
-    const getScoreClass = (s: number) => {
+export default function AnalysesCard({ analysis }) {
+    const getScoreClass = (s) => {
         if (s >= 80) return "score-good";
         if (s >= 50) return "score-medium";
         return "score-poor";

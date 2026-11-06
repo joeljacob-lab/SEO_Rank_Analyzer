@@ -1,17 +1,10 @@
 import { useState } from "react";
 import { ChevronDown, ChevronUp, AlertTriangle, AlertCircle, Info } from "lucide-react";
 
-interface Issue {
-    severity: string;
-    category: string;
-    message: string;
-    recommendation: string;
-}
-
-export default function IssueCard({ issue }: { issue: Issue }) {
+export default function IssueCard({ issue }) {
     const [expanded, setExpanded] = useState(false);
 
-    const severityConfig: Record<string, { icon: React.ReactNode; class: string; label: string }> = {
+    const severityConfig = {
         critical: {
             icon: <AlertCircle size={16} />,
             class: "severity-critical",

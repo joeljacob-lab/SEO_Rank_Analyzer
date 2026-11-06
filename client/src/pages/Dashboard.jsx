@@ -4,25 +4,11 @@ import { SearchIcon, ArrowRightIcon, BarChart3Icon, GlobeIcon, TrendingUpIcon } 
 import AnalysesCard from "../components/AnalysesCard";
 import { dummyAnalysisData } from "../assets/assets";
 
-interface AnalysisSummary {
-    _id: string;
-    url: string;
-    overallScore: number;
-    status: string;
-    createdAt: string;
-    categories: {
-        seo: number;
-        performance: number;
-        accessibility: number;
-        bestPractices: number;
-    };
-}
-
 export default function Dashboard() {
     const user = { name: "John Doe", plan: "free", analysisCount: 2 };
     const navigate = useNavigate();
     const [url, setUrl] = useState("");
-    const [analyses, setAnalyses] = useState<AnalysisSummary[]>([]);
+    const [analyses, setAnalyses] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const fetchRecent = async () => {
@@ -32,7 +18,7 @@ export default function Dashboard() {
         }, 1000);
     };
 
-    const handleAnalyze = (e: React.SubmitEvent) => {
+    const handleAnalyze = (e) => {
         e.preventDefault();
         if (url.trim()) {
             navigate(`/analyze?url=${encodeURIComponent(url)}`);
@@ -43,7 +29,7 @@ export default function Dashboard() {
     const avgScore = completedAnalyses.length ? Math.round(completedAnalyses.reduce((sum, a) => sum + a.overallScore, 0) / completedAnalyses.length) : 0;
     // const totalIssues = completedAnalyses.length;
 
-    const getScoreClass = (s: number) => {
+    const getScoreClass = (s) => {
         if (s >= 80) return "score-good";
         if (s >= 50) return "score-medium";
         return "score-poor";

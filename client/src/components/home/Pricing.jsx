@@ -28,7 +28,7 @@ export default function Pricing() {
                                 </li>
                             ))}
                         </ul>
-                        <Link to="/register" className="block w-full py-3 rounded-xl bg-primary/10 text-secondary-foreground text-center text-sm  hover:opacity-90 transition-colors">
+                        <Link to="/register" className="block w-full py-3 rounded-xl bg-primary/10 text-secondary-foreground text-center text-sm hover:opacity-90 transition-colors">
                             Get Started Free
                         </Link>
                     </div>

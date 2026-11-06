@@ -1,49 +1,15 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, Target, Globe, Clock, TrendingUp, TrendingDown, Minus, RefreshCw, AlertCircle, ExternalLink, Trophy, Users, Calendar, Loader2 } from "lucide-react";
 import { dummyWebsiteRanking } from "../assets/assets";
 
-interface RankHistoryEntry {
-    date: string;
-    position: number | null;
-    page: number | null;
-    title: string;
-    snippet: string;
-}
-
-interface Competitor {
-    position: number;
-    url: string;
-    domain: string;
-    title: string;
-    snippet: string;
-}
-
-interface TrackingData {
-    _id: string;
-    keyword: string;
-    url: string;
-    domain: string;
-    currentPosition: number | null;
-    currentPage: number | null;
-    bestPosition: number | null;
-    positionChange: number;
-    rankHistory: RankHistoryEntry[];
-    competitors: Competitor[];
-    active: boolean;
-    lastChecked: string | null;
-    status: string;
-    createdAt: string;
-}
-
 export default function RankDetail() {
     const { id } = useParams();
-    const [tracking, setTracking] = useState<TrackingData | null>(null);
+    const [tracking, setTracking] = useState(null);
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
     const [activeTab, setActiveTab] = useState("overview");
-    const chartRef = useRef<HTMLCanvasElement>(null);
+    const chartRef = useRef(null);
 
     const fetchTracking = async () => {
         setTimeout(() => {
@@ -89,7 +55,7 @@ export default function RankDetail() {
         ctx.clearRect(0, 0, w, h);
 
         // Find range (invert: position 1 = top)
-        const positions = history.map((h) => h.position!);
+        const positions = history.map((h) => h.position);
         const minPos = Math.max(1, Math.min(...positions) - 2);
         const maxPos = Math.max(...positions) + 2;
 
@@ -140,7 +106,7 @@ export default function RankDetail() {
 
         history.forEach((entry, i) => {
             const x = padding.left + (chartW / Math.max(history.length - 1, 1)) * i;
-            const yNorm = (entry.position! - minPos) / (maxPos - minPos);
+            const yNorm = (entry.position - minPos) / (maxPos - minPos);
             const y = padding.top + yNorm * chartH;
 
             if (i === 0) ctx.moveTo(x, y);
@@ -157,7 +123,7 @@ export default function RankDetail() {
         ctx.beginPath();
         history.forEach((entry, i) => {
             const x = padding.left + (chartW / Math.max(history.length - 1, 1)) * i;
-            const yNorm = (entry.position! - minPos) / (maxPos - minPos);
+            const yNorm = (entry.position - minPos) / (maxPos - minPos);
             const y = padding.top + yNorm * chartH;
             if (i === 0) ctx.moveTo(x, y);
             else ctx.lineTo(x, y);
@@ -171,7 +137,7 @@ export default function RankDetail() {
         // Draw dots
         history.forEach((entry, i) => {
             const x = padding.left + (chartW / Math.max(history.length - 1, 1)) * i;
-            const yNorm = (entry.position! - minPos) / (maxPos - minPos);
+            const yNorm = (entry.position - minPos) / (maxPos - minPos);
             const y = padding.top + yNorm * chartH;
 
             ctx.beginPath();
@@ -195,13 +161,13 @@ export default function RankDetail() {
         ctx.restore();
     };
 
-    const getChangeIndicator = (change: number) => {
+    const getChangeIndicator = (change) => {
         if (change > 0) return { icon: <TrendingUp size={16} />, text: `+${change}`, class: "text-emerald-500" };
         if (change < 0) return { icon: <TrendingDown size={16} />, text: `${change}`, class: "text-danger" };
         return { icon: <Minus size={16} />, text: "—", class: "text-muted-foreground" };
     };
 
-    const getPositionColor = (pos: number | null) => {
+    const getPositionColor = (pos) => {
         if (pos === null) return "text-muted-foreground";
         if (pos <= 3) return "text-emerald-500";
         if (pos <= 10) return "text-primary";

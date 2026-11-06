@@ -5,59 +5,9 @@ import IssueCard from "../components/IssueCard";
 import { ArrowLeft, Globe, Clock, FileText, Image, Link2, Heading, Tag, AlertCircle, ExternalLink, Type, Search } from "lucide-react";
 import { dummyWebsiteAnalysis } from "../assets/assets";
 
-interface AnalysisData {
-    _id: string;
-    url: string;
-    overallScore: number;
-    status: string;
-    createdAt: string;
-    loadTime: number;
-    pageSize: number;
-    wordCount: number;
-    categories: {
-        seo: number;
-        performance: number;
-        accessibility: number;
-        bestPractices: number;
-    };
-    metaData: {
-        title: string;
-        description: string;
-        canonical: string;
-        robots: string;
-        ogTitle: string;
-        ogDescription: string;
-        ogImage: string;
-        twitterCard: string;
-        viewport: string;
-        charset: string;
-    };
-    headings: {
-        h1: number;
-        h2: number;
-        h3: number;
-        h4: number;
-        h5: number;
-        h6: number;
-        h1Texts: string[];
-    };
-    links: {
-        internal: number;
-        external: number;
-        total: number;
-    };
-    images: {
-        total: number;
-        missingAlt: number;
-        withAlt: number;
-    };
-    keywords: { word: string; count: number; density: number }[];
-    issues: { severity: string; category: string; message: string; recommendation: string }[];
-}
-
 export default function Report() {
     const { id } = useParams();
-    const [analysis, setAnalysis] = useState<AnalysisData | null>(null);
+    const [analysis, setAnalysis] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error] = useState("");
     const [activeTab, setActiveTab] = useState("overview");
@@ -69,13 +19,13 @@ export default function Report() {
         }, 1500);
     };
 
-    const getScoreClass = (s: number) => {
+    const getScoreClass = (s) => {
         if (s >= 80) return "score-good";
         if (s >= 50) return "score-medium";
         return "score-poor";
     };
 
-    const getScoreBgClass = (s: number) => {
+    const getScoreBgClass = (s) => {
         if (s >= 80) return "score-bg-good";
         if (s >= 50) return "score-bg-medium";
         return "score-bg-poor";
@@ -313,7 +263,7 @@ export default function Report() {
                                 </h3>
                                 <div className="space-y-2">
                                     {["h1", "h2", "h3", "h4", "h5", "h6"].map((tag) => {
-                                        const count = analysis.headings[tag as keyof typeof analysis.headings] as number;
+                                        const count = analysis.headings[tag];
                                         const maxBar = Math.max(analysis.headings.h1, analysis.headings.h2, analysis.headings.h3, analysis.headings.h4, analysis.headings.h5, analysis.headings.h6, 1);
                                         return (
                                             <div key={tag} className="flex items-center gap-3">
@@ -436,7 +386,7 @@ export default function Report() {
                                 <h3 className="text-lg font-semibold text-foreground mb-4">Heading Hierarchy</h3>
                                 <div className="space-y-2">
                                     {["h1", "h2", "h3", "h4", "h5", "h6"].map((tag, i) => {
-                                        const count = analysis.headings[tag as keyof typeof analysis.headings] as number;
+                                        const count = analysis.headings[tag];
                                         return (
                                             <div key={tag} className="flex items-center gap-3 p-2.5 bg-muted/30 border border-border rounded-lg" style={{ paddingLeft: `${i * 12 + 12}px` }}>
                                                 <span className="text-xs font-mono font-bold text-primary uppercase">&lt;{tag}&gt;</span>

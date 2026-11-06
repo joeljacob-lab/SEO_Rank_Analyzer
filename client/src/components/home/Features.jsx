@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { homeFeaturesData } from "../../assets/assets";
 
 export default function Features() {
@@ -13,7 +12,7 @@ export default function Features() {
                     <p className="text-muted-foreground max-w-lg mx-auto">Comprehensive SEO analysis powered by real browser rendering and artificial intelligence.</p>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-7">
-                    {homeFeaturesData.map((f: any) => (
+                    {homeFeaturesData.map((f) => (
                         <div key={f.title} className="bg-card border border-border rounded-2xl p-6 hover:bg-muted/30 backdrop-blur transition-all group">
                             <div className="text-primary mb-4 group-hover:translate-y-1 transition-transform duration-300 inline-block">{f.icon}</div>
                             <h3 className="text-lg font-medium mb-2 text-foreground">{f.title}</h3>

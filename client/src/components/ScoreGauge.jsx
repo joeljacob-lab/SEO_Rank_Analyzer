@@ -1,17 +1,10 @@
-interface ScoreGaugeProps {
-    score: number;
-    size?: number;
-    strokeWidth?: number;
-    label?: string;
-}
-
-export default function ScoreGauge({ score, size = 140, strokeWidth = 10, label }: ScoreGaugeProps) {
+export default function ScoreGauge({ score, size = 140, strokeWidth = 10, label }) {
     const radius = (size - strokeWidth) / 2;
     const circumference = 2 * Math.PI * radius;
     const progress = (score / 100) * circumference;
     const offset = circumference - progress;
 
-    const getColor = (s: number) => {
+    const getColor = (s) => {
         if (s >= 80) return "#10b981";
         if (s >= 50) return "#f59e0b";
         return "#ef4444";
