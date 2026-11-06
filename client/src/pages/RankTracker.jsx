@@ -1,34 +1,18 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Target, Plus, RefreshCw, Trash2, TrendingUp, TrendingDown, Minus, ExternalLink, Clock, Loader2, X, Search, Globe, AlertCircle, Eye, EyeOff, Filter, ArrowUpDown } from "lucide-react";
 import { dummyRankings } from "../assets/assets";
 
-interface KeywordItem {
-    _id: string;
-    keyword: string;
-    url: string;
-    domain: string;
-    currentPosition: number | null;
-    currentPage: number | null;
-    bestPosition: number | null;
-    positionChange: number;
-    active: boolean;
-    lastChecked: string | null;
-    status: string;
-    competitors: { position: number; url: string; domain: string; title: string; snippet: string }[];
-}
-
 export default function RankTracker() {
-    const [keywords, setKeywords] = useState<KeywordItem[]>([]);
+    const [keywords, setKeywords] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showAddModal, setShowAddModal] = useState(false);
     const [newKeyword, setNewKeyword] = useState("");
     const [newUrl, setNewUrl] = useState("");
     const [adding, setAdding] = useState(false);
     const [addError, setAddError] = useState("");
-    const [refreshing, setRefreshing] = useState<string | null>(null);
-    const [deleting, setDeleting] = useState<string | null>(null);
+    const [refreshing, setRefreshing] = useState(null);
+    const [deleting, setDeleting] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [statusFilter, setStatusFilter] = useState("all");
     const [sortBy, setSortBy] = useState("newest");
@@ -40,7 +24,7 @@ export default function RankTracker() {
         }, 1000);
     };
 
-    const handleAdd = async (e: React.SubmitEvent) => {
+    const handleAdd = async (e) => {
         e.preventDefault();
         setAdding(true);
         setTimeout(() => {
@@ -49,14 +33,14 @@ export default function RankTracker() {
         }, 1000);
     };
 
-    const handleRefresh = async (id: string) => {
+    const handleRefresh = async (id) => {
         setRefreshing(id);
         setTimeout(() => {
             setRefreshing(null);
         }, 1000);
     };
 
-    const handleDelete = async (id: string) => {
+    const handleDelete = async (id) => {
         if (!confirm("Delete this keyword tracking?")) return;
         setDeleting(id);
         setTimeout(() => {
@@ -64,11 +48,11 @@ export default function RankTracker() {
         }, 1000);
     };
 
-    const handleToggle = async (id: string) => {
+    const handleToggle = async (id) => {
         console.log(id);
     };
 
-    const getPositionBadge = (pos: number | null) => {
+    const getPositionBadge = (pos) => {
         if (pos === null) return { text: "Not Ranked", class: "text-muted-foreground bg-muted/50" };
         if (pos <= 3) return { text: `#${pos}`, class: "text-emerald-400 bg-emerald-500/15 border border-emerald-500/30" };
         if (pos <= 10) return { text: `#${pos}`, class: "text-primary bg-primary/15 border border-primary/30" };
@@ -76,7 +60,7 @@ export default function RankTracker() {
         return { text: `#${pos}`, class: "text-danger bg-danger/15 border border-danger/30" };
     };
 
-    const getChangeIndicator = (change: number) => {
+    const getChangeIndicator = (change) => {
         if (change > 0) return { icon: <TrendingUp size={14} />, text: `+${change}`, class: "text-emerald-500" };
         if (change < 0) return { icon: <TrendingDown size={14} />, text: `${change}`, class: "text-danger" };
         return { icon: <Minus size={14} />, text: "0", class: "text-muted-foreground" };
@@ -96,7 +80,7 @@ export default function RankTracker() {
         }
     }
 
-    processedData.sort((a: any, b: any) => {
+    processedData.sort((a, b) => {
         if (sortBy === "newest") {
             return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
         } else if (sortBy === "rank_asc") {
@@ -114,7 +98,7 @@ export default function RankTracker() {
     }, []);
 
     return (
-        <div className="min-h-scree pt-16 md:pt-24 bg-background">
+        <div className="min-h-screen pt-16 md:pt-24 bg-background">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
                 {/* Header */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
